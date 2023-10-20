@@ -110,10 +110,10 @@ impl Component for App {
                 if self.files.len() > 0 {
                     let image = image::load_from_memory(&self.files[0].data);
                     let grayscale = ImageAdapter::new(image.expect("Should be valid image").into_luma8());
-                    let truchet = truchet::truchet_image::generate(&grayscale, truchet::generator::circles(Vec2::new(6, 6)));
+                    let truchet = truchet::truchet_image::generate(&grayscale, truchet::generator::circles(Vec2::new(3,3)));
                     let svg = truchet.to_svg_node();
                     let g = Group::new()
-                        .set("transform", "scale(10 10)")
+                        .set("transform", "scale(6 6)")
                         .add(svg);
                     let svg_doc = SVG::new()
                         .add(g)
@@ -167,10 +167,23 @@ impl Component for App {
         });
 
         html! {
-            <div id="wrapper-wrapper" class={ classes!("flex","content-center","w-screen","h-screen","p-20") }>
-                <div id="wrapper" class={ classes!("bg-slate-500","flex","flex-row","space-x-10","outline","outline-grey","w-screen","justify-around") }>
-                    <div id="image-upload" class={ classes!("flex","flex-col","space-y-2","outline-dashed","outline-white") }>
-                        <p id="image-upload-title">{ "Upload Your Image to Process!" }</p>
+            <div 
+                id="wrapper-wrapper" 
+                class={ classes!("flex","content-center","w-screen","h-screen","p-20") }
+            >
+                <div 
+                    id="wrapper" 
+                    class={ classes!("bg-slate-500","flex","flex-row","space-x-10","outline","outline-grey","w-screen","justify-around") }
+                >
+                    <div 
+                        id="image-upload" 
+                        class={ classes!("flex","flex-col","space-y-2","outline-dashed","outline-white") }
+                    >
+                        <p 
+                          id="image-upload-title"
+                        >
+                            { "Upload Your Image to Process!" }
+                        </p>
                         <label for="file-upload">
                             <div
                                 id="drop-container"
@@ -186,8 +199,13 @@ impl Component for App {
                                     event.prevent_default();
                                 })}
                             >
-                                <i class="fa fa-cloud-upload"></i>
-                                <p>{"Drop your images here or click to select"}</p>
+                                <i 
+                                    class="fa fa-cloud-upload"
+                                >
+                                </i>
+                                <p>
+                                    {"Drop your images here or click to select"}
+                                </p>
                             </div>
                         </label>
                         <input
@@ -205,13 +223,17 @@ impl Component for App {
                         </div>
                     </div>
 
-                    <div id="settings" class={ classes!("flex","flex-col","outline-dashed","outline-white") }>
+                    <div 
+                        id="settings" 
+                        class={ classes!("flex","flex-col","outline-dashed","outline-white","h-full") }
+                    >
                         <p 
                             id="settings-title"
                         >
                             { "Settings!" }
                         </p>
                         <ul 
+                            class={ classes!("bg-white","text-gray-400","space-y-4","h-full") }
                             id="settings-wrapper"
                         >
                             <li 
@@ -252,7 +274,7 @@ impl Component for App {
                                 </div>
                                 <div 
                                     id="tile-dropdown-wrapper"
-                                    class={ classes!("rounded-md","bg-white","focus:outline-none") } 
+                                    class={ classes!("rounded-md","bg-white","focus:outline-none", "py-4") } 
                                     role="menu" 
                                     aria-orientation="vertical" 
                                     aria-labelledby="menu-button" 
@@ -263,11 +285,55 @@ impl Component for App {
                                         class="py-1" 
                                         role="none"
                                     >
-                                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">{"Circle"}</a>
-                                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">{"Triangle"}</a>
+                                        <a href="#" 
+                                            class={ classes!("text-gray-700","block","px-4","py-2","text-sm","outline-dashed","hover:outline") }
+                                            role="menuitem" tabindex="-1"
+                                            id="menu-item-0"
+                                        >
+                                            {"Circle"}
+                                        </a>
+                                        <a href="#" 
+                                            class={ classes!("text-gray-700","block","px-4","py-2","text-sm","outline-dashed","hover:outline" ) }
+                                            role="menuitem" 
+                                            tabindex="-1" 
+                                            id="menu-item-1"
+                                        >
+                                            {"Triangle"}
+                                        </a>
                                     </div>
                                 </div>
-                                <form method="POST" action="#" role="none" class={ classes!("my-20") }>
+                                
+                           
+                            </li>
+                            <li>
+                                <div 
+                                    id="tile-size-wrapper"
+                                    class={ classes!("rounded-md","bg-white","focus:outline-none") } 
+                                    role="menu" 
+                                    aria-orientation="vertical" 
+                                    aria-labelledby="menu-button" 
+                                    tabindex="-1"
+                                >
+                                    <div 
+                                        id="tile-size-text-input-wrapper"
+                                        class={ classes!("py-1","bg-white","shadow-md","rounded","px-8","pt-6","pb-8","mb-4") } 
+                                        role="none"
+                                    >
+                                        <form
+                                            id="tile-size-text-input-form"
+                                        >
+                                            <label for="tile-size-text-input">{"Tile size:"}</label>
+                                            <input class={ classes!("shadow","appearance-none","border","rounded","w-full","py-2","px-3","text-gray-700","leading-tight","focus:outline-none","focus:shadow-outline") } 
+                                                id="tile-size-text-input" 
+                                                type="text" 
+                                                placeholder="Username"
+                                            />
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <form method="POST" action="#" role="none" class={ classes!("") }>
                                     <button 
                                         type="submit" 
                                         class={ classes!("bg-white","text-gray-700","block","w-full","px-4","py-2","text-left","text-sm") } 
@@ -279,8 +345,6 @@ impl Component for App {
                                     </button>
                                 </form>
                             </li>
-                            <li>{""}</li>
-                            <li>{""}</li>
                         </ul>
                         <label for="generate">
                             <button 
